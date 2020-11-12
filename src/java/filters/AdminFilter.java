@@ -28,41 +28,27 @@ import models.User;
  */
 public class AdminFilter implements Filter {
     
+    private String adminEmail = "cprg352+admin@gmail.com";
+    
         @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
         
         
-        //HttpServletResponse httpResponse = (HttpServletResponse)response;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
+        
         String email = (String)session.getAttribute("email");
-        
-        UserDB userdb = new UserDB();
-        User user = null;
-        
-        if(email == null)
-        {
-            HttpServletResponse httpResponse = (HttpServletResponse)response;
-            httpResponse.sendRedirect("login");
-            return;
-        }
 
-            user = userdb.get(email);
             
-            Role userRole = user.getRole();
-            
-            if(userRole.getRoleName()!= "Admin" || userRole.getRoleName() != "admin")
+            if(email == null ? adminEmail != null : !email.equals(adminEmail))
             {
                 HttpServletResponse httpResponse = (HttpServletResponse)response;
             httpResponse.sendRedirect("notes");
+            return;
             }
-            else
-            {
-                HttpServletResponse httpResponse = (HttpServletResponse)response;
-                httpResponse.sendRedirect("admin");
-            }
+            
             chain.doFilter(request, response);
         
     }
